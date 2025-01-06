@@ -15,19 +15,30 @@ export class VenueNestApp {
     await app.listen(this.port, () =>
       this.logger.debug(`🚀 Server running on http://localhost:${this.port}`),
     );
+    this.logger.debug(
+      `📖 Swagger Docs available at http://localhost:${this.port}/explorer`,
+    );
   }
 
   private static setupSwagger(app: INestApplication): void {
     const config = new DocumentBuilder()
-      .setTitle('NestJS API')
-      .setDescription('NestJS API Documentation')
+      .setTitle('VenueNest API')
+      .setDescription('VenueNest API Documentation')
       .setVersion('1.0')
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          name: 'JWT',
+          description: 'Enter JWT TOKEN',
+          in: 'header',
+        },
+        'JWT-Auth',
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('explorer', app, document);
-    this.logger.debug(
-      `📖 Swagger Docs available at http://localhost:3000/explorer`,
-    );
   }
 }
 
