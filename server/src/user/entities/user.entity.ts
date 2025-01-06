@@ -11,17 +11,7 @@ export class User {
   @Prop({ type: String, lowercase: true })
   @ApiProperty({ type: String })
   @Expose()
-  firstName: string;
-
-  @Prop({ type: String, lowercase: true })
-  @ApiProperty({ type: String })
-  @Expose()
-  lastName: string;
-
-  @Prop({ type: String, unique: true })
-  @ApiProperty({ type: String })
-  @Expose()
-  phone: string;
+  name: string;
 
   @Prop({
     type: String,
@@ -34,10 +24,45 @@ export class User {
   @Expose()
   email: string;
 
+  @Prop({ type: String })
+  @ApiProperty({ type: String })
+  password: string;
+
+  @Prop({
+    type: String,
+    unique: true,
+    index: true,
+    lowercase: true,
+    trim: true,
+  })
+  @ApiProperty({ type: String })
+  @Expose()
+  username: string;
+
+  @Prop({ type: String, unique: true })
+  @ApiProperty({ type: String })
+  @Expose()
+  phone: string;
+
   @Prop({ type: String, enum: Object.values(RoleEnum) })
   @ApiProperty({ type: String, enum: Object.values(RoleEnum) })
   @Expose()
   role: RoleEnum;
+
+  @Prop({ type: Boolean })
+  @ApiProperty({ type: Boolean })
+  @Expose()
+  disabled: boolean;
+
+  @Prop({ type: Boolean })
+  @ApiProperty({ type: Boolean })
+  @Expose()
+  deactivated: boolean;
+
+  @Prop({ type: Boolean })
+  @ApiProperty({ type: Boolean })
+  @Expose()
+  deleted: boolean;
 }
 
 export type UserDocument = User & Document;
