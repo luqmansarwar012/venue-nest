@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { Model } from 'mongoose';
@@ -10,8 +10,18 @@ export class UserService {
   private logger: Logger = new Logger(UserService.name);
 
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-  create(createUserDto: CreateUserDto) {
-    console.log(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const model = new this.userModel({
+      ...createUserDto,
+      disabled: false,
+      deactivated: false,
+      deleted: false,
+    });
+    const userCreated: User = await model.save();
+    if (!userCreated) {
+      throw new HttpException('Unable to register user', 422);
+    }
+
     return 'This action adds a new user';
   }
 
