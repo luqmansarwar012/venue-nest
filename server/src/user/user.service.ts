@@ -22,7 +22,11 @@ export class UserService {
       throw new HttpException('Unable to register user', 422);
     }
 
-    return 'This action adds a new user';
+    this.logger.log('User created successfully');
+    return {
+      message: 'User created successfully',
+      data: userCreated,
+    };
   }
 
   findAll() {

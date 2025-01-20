@@ -10,13 +10,22 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { UserSignupResponseDto } from './dto/userResponse.dto';
+import { UseTransformer } from 'src/utility/transformer';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  @Post('/signup')
+  @UseTransformer({
+    type: UserSignupResponseDto,
+    status: 201,
+    apiResponse: true,
+  })
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserSignupResponseDto> {
     return await this.userService.create(createUserDto);
   }
 
