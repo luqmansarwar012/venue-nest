@@ -31,4 +31,12 @@ export class UserService {
 
     return userSignupResponse;
   }
+
+  async isFieldTaken(field: string, value: string | number): Promise<boolean> {
+    const user: User = await this.userModel.findOne({ [field]: value });
+    if (user) {
+      return true;
+    }
+    return false;
+  }
 }

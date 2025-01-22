@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RoleEnum } from '../../utils/enums';
-import { IsString, IsEnum, IsNotEmpty, IsEmail } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNotEmpty,
+  IsEmail,
+  IsMobilePhone,
+} from 'class-validator';
+import { IsUniqueField } from 'src/utility/validators/isUniqueField-decorator';
 
 export class CreateUserDto {
   @ApiProperty({ type: String })
@@ -9,6 +16,7 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({ type: String })
+  @IsUniqueField({ field: 'email' })
   @IsNotEmpty({ message: 'Email should not be empty' })
   @IsEmail({}, { message: 'Email must be a valid email address' })
   email: string;
@@ -24,6 +32,11 @@ export class CreateUserDto {
   username: string;
 
   @ApiProperty({ type: String })
+  @IsMobilePhone(
+    null,
+    { strictMode: true },
+    { message: 'Phone number must be valid' },
+  )
   @IsNotEmpty({ message: 'Phone should not be empty' })
   @IsString({ message: 'Phone must be a string' })
   phone: string;
