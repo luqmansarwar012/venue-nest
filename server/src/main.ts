@@ -66,13 +66,16 @@ export class VenueNestApp {
 
         exceptionFactory: (errors: ValidationError[]) => {
           const errorsException = this.exceptionFactory(errors);
-          return new HttpException(errorsException, 422);
+          const firstError = Object.keys(errorsException)[0];
+          const firstErrorMessage = errorsException[firstError];
+          this.logger.error(`Validation Error: ${firstErrorMessage}`);
+          return new HttpException(`${firstErrorMessage}`, 422);
         },
       }),
     );
   }
 
-  static exceptionFactory(errors: ValidationError[]): ValidatorErrors {
+  private static exceptionFactory(errors: ValidationError[]): ValidatorErrors {
     const errorsException: ValidatorErrors = {};
     for (const error of errors) {
       if (error.constraints) {
