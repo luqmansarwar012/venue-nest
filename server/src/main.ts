@@ -10,6 +10,7 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MongoExceptionFilter } from './utility/exception-filters';
 import { json, urlencoded } from 'express';
+import { useContainer } from 'class-validator';
 
 interface ValidatorErrors {
   [key: string]: string | ValidatorErrors;
@@ -22,6 +23,7 @@ export class VenueNestApp {
   public static async start(): Promise<void> {
     const app: INestApplication = await NestFactory.create(AppModule);
 
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
     this.setupSwagger(app);
     this.setupValidation(app);
     this.setupGlobalFilters(app);
