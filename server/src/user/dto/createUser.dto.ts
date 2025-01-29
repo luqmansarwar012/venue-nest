@@ -8,6 +8,7 @@ import {
   IsMobilePhone,
 } from 'class-validator';
 import { IsUniqueField } from 'src/utility/validators/isUniqueField-decorator';
+import { IsNotAdminRole } from 'src/utility/validators/isNotAdminRole-decorator';
 
 export class CreateUserDto {
   @ApiProperty({ type: String })
@@ -44,5 +45,6 @@ export class CreateUserDto {
   @ApiProperty({ type: String, enum: Object.values(RoleEnum) })
   @IsNotEmpty({ message: 'Role should not be empty' })
   @IsEnum(RoleEnum, { message: 'Role must be a valid enum value' })
+  @IsNotAdminRole()
   role: RoleEnum;
 }

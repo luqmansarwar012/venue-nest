@@ -4,16 +4,21 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserSignupResponseDto } from './dto/userResponse.dto';
+import { HelperService } from 'src/helper/helper.service';
 
 @Injectable()
 export class UserService {
   private logger: Logger = new Logger(UserService.name);
 
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly helperService: HelperService,
+  ) {}
   async create(createUserDto: CreateUserDto): Promise<UserSignupResponseDto> {
     try {
       const model = new this.userModel({
         ...createUserDto,
+        password: await this.helperService.hashPassword(createUserDto.password),
         disabled: false,
         deactivated: false,
         deleted: false,

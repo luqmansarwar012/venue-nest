@@ -11,6 +11,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MongoExceptionFilter } from './utility/exception-filters';
 import { json, urlencoded } from 'express';
 import { useContainer } from 'class-validator';
+import { constants } from './utils/constants';
 
 interface ValidatorErrors {
   [key: string]: string | ValidatorErrors;
@@ -18,7 +19,7 @@ interface ValidatorErrors {
 
 export class VenueNestApp {
   private static readonly logger = new Logger(VenueNestApp.name);
-  private static readonly port = process.env.PORT || 3000;
+  private static readonly port = constants.PORT;
 
   public static async start(): Promise<void> {
     const app: INestApplication = await NestFactory.create(AppModule);
